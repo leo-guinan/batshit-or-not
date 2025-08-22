@@ -14,11 +14,11 @@ interface IdeaCardProps {
 }
 
 const RATING_RANGES = [
-  { value: 2, label: "1-2", name: "Sane", color: "bg-gradient-to-r from-success to-success/80 text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
-  { value: 4, label: "3-4", name: "Quirky", color: "bg-gradient-to-r from-secondary to-secondary/80 text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
-  { value: 6, label: "5-6", name: "Weird", color: "bg-gradient-to-r from-accent to-primary/60 text-foreground shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
-  { value: 8, label: "7-8", name: "Crazy", color: "bg-gradient-to-r from-primary to-destructive text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
-  { value: 10, label: "9-10", name: "Batshit", color: "bg-gradient-to-r from-destructive to-primary text-white shadow-xl border-2 border-destructive/50", hoverColor: "hover:shadow-2xl hover:scale-110 hover:rotate-2" },
+  { value: 2, label: "1-2", name: "Sane", color: "bg-green-500 text-white shadow-sm", hoverColor: "hover:bg-green-600 hover:shadow-md" },
+  { value: 4, label: "3-4", name: "Quirky", color: "bg-purple-500 text-white shadow-sm", hoverColor: "hover:bg-purple-600 hover:shadow-md" },
+  { value: 6, label: "5-6", name: "Weird", color: "bg-slate-600 text-white shadow-sm", hoverColor: "hover:bg-slate-700 hover:shadow-md" },
+  { value: 8, label: "7-8", name: "Crazy", color: "bg-orange-500 text-white shadow-sm", hoverColor: "hover:bg-orange-600 hover:shadow-md" },
+  { value: 10, label: "9-10", name: "Batshit", color: "bg-red-600 text-white shadow-sm border-2 border-red-500", hoverColor: "hover:bg-red-700 hover:shadow-md" },
 ];
 
 const CATEGORY_COLORS = {
@@ -160,7 +160,7 @@ export default function IdeaCard({ idea, onRate, isRatingPending }: IdeaCardProp
                     key={range.value}
                     variant="ghost"
                     size="sm"
-                    className={`rating-button ${range.color} ${range.hoverColor} py-2 px-1 text-xs font-semibold flex flex-col`}
+                    className={`rating-button ${range.color} ${range.hoverColor} py-3 px-3 text-sm font-semibold flex flex-col transition-all duration-200 rounded-lg`}
                     onClick={() => handleRatingClick(range.value)}
                     disabled={isRatingPending}
                     data-testid={`rating-button-${range.value}`}
