@@ -8,10 +8,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy, Star, BarChart, Search, UserPlus, UserCheck, UserX, Users } from "lucide-react";
+import { Trophy, Star, BarChart, Search, UserPlus, UserCheck, UserX, Users, TrendingUp } from "lucide-react";
 import type { User, UserStats, Friendship } from "@shared/schema";
 import battyLogo from "@assets/ChatGPT Image Aug 22, 2025, 04_28_34 PM_1755895253186.png";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import RatingComparison from "@/components/RatingComparison";
 
 interface ProfileData {
   user: User;
@@ -239,14 +240,18 @@ export default function Profile() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="stats" data-testid="tab-stats">
-              <BarChart className="w-4 h-4 mr-2" />
+              <BarChart className="w-4 h-4 mr-1" />
               Stats
             </TabsTrigger>
             <TabsTrigger value="friends" data-testid="tab-friends">
-              <Users className="w-4 h-4 mr-2" />
+              <Users className="w-4 h-4 mr-1" />
               Friends ({friends.length})
+            </TabsTrigger>
+            <TabsTrigger value="insights" data-testid="tab-insights">
+              <TrendingUp className="w-4 h-4 mr-1" />
+              Insights
             </TabsTrigger>
           </TabsList>
 
@@ -556,6 +561,10 @@ export default function Profile() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="insights" className="mt-6">
+            <RatingComparison />
           </TabsContent>
         </Tabs>
       </div>

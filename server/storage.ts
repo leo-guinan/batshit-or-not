@@ -44,6 +44,19 @@ export interface IStorage {
   getPendingFriendRequests(userId: string): Promise<(User & { friendship: Friendship })[]>;
   removeFriend(userId: string, friendId: string): Promise<void>;
   searchUsers(query: string, currentUserId: string): Promise<User[]>;
+  
+  // Rating comparison operations
+  getRatingComparison(userId: string): Promise<{
+    userAverage: number;
+    friendsAverage: number;
+    globalAverage: number;
+    categoryBreakdown: Array<{
+      category: string;
+      userAverage: number;
+      friendsAverage: number;
+      globalAverage: number;
+    }>;
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -338,6 +351,120 @@ export class DatabaseStorage implements IStorage {
       .limit(10);
 
     return results;
+  }
+
+  async getRatingComparison(userId: string): Promise<{
+    userAverage: number;
+    friendsAverage: number;
+    globalAverage: number;
+    categoryBreakdown: Array<{
+      category: string;
+      userAverage: number;
+      friendsAverage: number;
+      globalAverage: number;
+    }>;
+  }> {
+    // Get user's friends
+    const friends = await this.getFriends(userId);
+    const friendIds = friends.map(f => f.id);
+
+    // Calculate user's average rating given
+    const [userStats] = await db
+      .select({
+        average: sql<number>`AVG(${ratings.rating})::float`,
+      })
+      .from(ratings)
+      .where(eq(ratings.userId, userId));
+
+    const userAverage = userStats?.average || 0;
+
+    // Calculate friends' average rating given
+    let friendsAverage = 0;
+    if (friendIds.length > 0) {
+      const [friendsStats] = await db
+        .select({
+          average: sql<number>`AVG(${ratings.rating})::float`,
+        })
+        .from(ratings)
+        .where(sql`${ratings.userId} = ANY(${friendIds})`);
+
+      friendsAverage = friendsStats?.average || 0;
+    }
+
+    // Calculate global average rating
+    const [globalStats] = await db
+      .select({
+        average: sql<number>`AVG(${ratings.rating})::float`,
+      })
+      .from(ratings);
+
+    const globalAverage = globalStats?.average || 0;
+
+    // Calculate category breakdown
+    const categories = ['technology', 'lifestyle', 'business', 'entertainment', 'other'];
+    const categoryBreakdown = [];
+
+    for (const category of categories) {
+      // User's average for this category
+      const [userCategoryStats] = await db
+        .select({
+          average: sql<number>`AVG(${ratings.rating})::float`,
+        })
+        .from(ratings)
+        .innerJoin(ideas, eq(ratings.ideaId, ideas.id))
+        .where(
+          and(
+            eq(ratings.userId, userId),
+            eq(ideas.category, category)
+          )
+        );
+
+      const userCategoryAverage = userCategoryStats?.average || 0;
+
+      // Friends' average for this category
+      let friendsCategoryAverage = 0;
+      if (friendIds.length > 0) {
+        const [friendsCategoryStats] = await db
+          .select({
+            average: sql<number>`AVG(${ratings.rating})::float`,
+          })
+          .from(ratings)
+          .innerJoin(ideas, eq(ratings.ideaId, ideas.id))
+          .where(
+            and(
+              sql`${ratings.userId} = ANY(${friendIds})`,
+              eq(ideas.category, category)
+            )
+          );
+
+        friendsCategoryAverage = friendsCategoryStats?.average || 0;
+      }
+
+      // Global average for this category
+      const [globalCategoryStats] = await db
+        .select({
+          average: sql<number>`AVG(${ratings.rating})::float`,
+        })
+        .from(ratings)
+        .innerJoin(ideas, eq(ratings.ideaId, ideas.id))
+        .where(eq(ideas.category, category));
+
+      const globalCategoryAverage = globalCategoryStats?.average || 0;
+
+      categoryBreakdown.push({
+        category,
+        userAverage: userCategoryAverage,
+        friendsAverage: friendsCategoryAverage,
+        globalAverage: globalCategoryAverage,
+      });
+    }
+
+    return {
+      userAverage,
+      friendsAverage,
+      globalAverage,
+      categoryBreakdown,
+    };
   }
 }
 

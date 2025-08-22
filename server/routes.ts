@@ -261,6 +261,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/ratings/comparison", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const comparisonData = await storage.getRatingComparison(userId);
+      res.json(comparisonData);
+    } catch (error) {
+      console.error("Error fetching rating comparison:", error);
+      res.status(500).json({ message: "Failed to fetch rating comparison" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
