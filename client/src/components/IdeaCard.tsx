@@ -14,11 +14,46 @@ interface IdeaCardProps {
 }
 
 const RATING_RANGES = [
-  { value: 2, label: "1-2", name: "Sane", color: "bg-green-500 text-white shadow-sm", hoverColor: "hover:bg-green-600 hover:shadow-md" },
-  { value: 4, label: "3-4", name: "Quirky", color: "bg-purple-500 text-white shadow-sm", hoverColor: "hover:bg-purple-600 hover:shadow-md" },
-  { value: 6, label: "5-6", name: "Weird", color: "bg-slate-600 text-white shadow-sm", hoverColor: "hover:bg-slate-700 hover:shadow-md" },
-  { value: 8, label: "7-8", name: "Crazy", color: "bg-orange-500 text-white shadow-sm", hoverColor: "hover:bg-orange-600 hover:shadow-md" },
-  { value: 10, label: "9-10", name: "Batshit", color: "bg-red-600 text-white shadow-sm border-2 border-red-500", hoverColor: "hover:bg-red-700 hover:shadow-md" },
+  { 
+    value: 2, 
+    label: "1-2", 
+    name: "TOO SANE", 
+    color: "text-white shadow-lg", 
+    bgColor: "#28A745",
+    shadowColor: "rgba(40, 167, 69, 0.4)"
+  },
+  { 
+    value: 4, 
+    label: "3-4", 
+    name: "QUIRKY AF", 
+    color: "text-white shadow-lg", 
+    bgColor: "#7B4397",
+    shadowColor: "rgba(123, 67, 151, 0.4)"
+  },
+  { 
+    value: 6, 
+    label: "5-6", 
+    name: "WTF?", 
+    color: "text-orange-100 shadow-lg", 
+    bgColor: "#1A1A1A",
+    shadowColor: "rgba(26, 26, 26, 0.6)"
+  },
+  { 
+    value: 8, 
+    label: "7-8", 
+    name: "TOTALLY UNHINGED", 
+    color: "text-white shadow-lg", 
+    bgColor: "#F39C3C",
+    shadowColor: "rgba(243, 156, 60, 0.4)"
+  },
+  { 
+    value: 10, 
+    label: "9-10", 
+    name: "FULL BATSHIT", 
+    color: "text-white shadow-xl", 
+    bgColor: "#DC3545",
+    shadowColor: "rgba(220, 53, 69, 0.5)"
+  },
 ];
 
 const CATEGORY_COLORS = {
@@ -144,31 +179,51 @@ export default function IdeaCard({ idea, onRate, isRatingPending }: IdeaCardProp
         {/* Rating Interface */}
         {!ratingCheck?.hasRated ? (
           <div className="bg-muted rounded-xl p-4 mb-4">
-            <div className="text-center mb-3">
-              <p className="text-sm font-medium text-muted-foreground mb-1">Rate this idea:</p>
-              <div className="batshit-scale h-2 rounded-full mb-2"></div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Boringly Sane</span>
-                <span>Absolutely Batshit</span>
-              </div>
+            <div className="text-center mb-4">
+              <p className="text-sm font-medium text-muted-foreground mb-3">Rate this idea:</p>
             </div>
             
             {showRatingButtons ? (
-              <div className="grid grid-cols-5 gap-2">
-                {RATING_RANGES.map((range) => (
-                  <Button
-                    key={range.value}
-                    variant="ghost"
-                    size="sm"
-                    className={`rating-button ${range.color} ${range.hoverColor} py-3 px-3 text-sm font-semibold flex flex-col transition-all duration-200 rounded-lg`}
-                    onClick={() => handleRatingClick(range.value)}
-                    disabled={isRatingPending}
-                    data-testid={`rating-button-${range.value}`}
-                  >
-                    {range.label}
-                    <span className="text-xs opacity-75">{range.name}</span>
-                  </Button>
-                ))}
+              <div className="relative">
+                {/* Gradient background bar */}
+                <div 
+                  className="absolute inset-x-0 top-1/2 transform -translate-y-1/2 h-3 rounded-full opacity-30"
+                  style={{
+                    background: 'linear-gradient(to right, #28A745, #7B4397, #1A1A1A, #F39C3C, #DC3545)'
+                  }}
+                ></div>
+                
+                {/* Rating buttons */}
+                <div className="relative flex justify-between gap-2 mb-3">
+                  {RATING_RANGES.map((range) => (
+                    <button
+                      key={range.value}
+                      className={`rating-button ${range.color} font-black text-sm tracking-wider flex flex-col items-center justify-center py-3 px-4 rounded-2xl transition-all duration-300 ease-out hover:scale-110 active:scale-95 transform-gpu font-montserrat`}
+                      style={{
+                        backgroundColor: range.bgColor,
+                        boxShadow: `0 4px 12px ${range.shadowColor}, 0 2px 4px rgba(0,0,0,0.1)`
+                      }}
+                      onClick={() => handleRatingClick(range.value)}
+                      disabled={isRatingPending}
+                      data-testid={`rating-button-${range.value}`}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = `0 6px 20px ${range.shadowColor}, 0 4px 8px rgba(0,0,0,0.15)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = `0 4px 12px ${range.shadowColor}, 0 2px 4px rgba(0,0,0,0.1)`;
+                      }}
+                    >
+                      <span className="text-xs font-bold mb-1">{range.label}</span>
+                      <span className="text-xs font-black leading-tight text-center">{range.name}</span>
+                    </button>
+                  ))}
+                </div>
+                
+                {/* Scale labels */}
+                <div className="flex justify-between text-xs text-muted-foreground px-2">
+                  <span>Boringly Sane</span>
+                  <span>Absolutely Batshit</span>
+                </div>
               </div>
             ) : (
               <Button

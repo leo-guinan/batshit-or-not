@@ -66,6 +66,7 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)"],
         display: ["var(--font-display)"],
+        montserrat: ["Montserrat", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
       },
