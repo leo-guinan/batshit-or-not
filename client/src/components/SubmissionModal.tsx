@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { insertIdeaSchema, type InsertIdea } from "@shared/schema";
 import { z } from "zod";
+import battyLogo from "@assets/ChatGPT Image Aug 22, 2025, 04_28_34 PM_1755895253186.png";
 
 interface SubmissionModalProps {
   isOpen: boolean;
@@ -127,9 +128,18 @@ export default function SubmissionModal({ isOpen, onClose }: SubmissionModalProp
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto" data-testid="submission-modal">
         <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
-          <DialogTitle className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-            🦇 SHARE YOUR WILD IDEA
-          </DialogTitle>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10">
+              <img 
+                src={battyLogo} 
+                alt="Batty excited" 
+                className="w-full h-full object-contain animate-wiggle"
+              />
+            </div>
+            <DialogTitle className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
+              SHARE YOUR WILD IDEA
+            </DialogTitle>
+          </div>
           <button
             onClick={handleClose}
             className="h-8 w-8 rounded-xl bg-muted hover:bg-destructive/20 flex items-center justify-center transition-all hover:scale-110"

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trophy, Star, BarChart } from "lucide-react";
 import type { User, UserStats } from "@shared/schema";
+import battyLogo from "@assets/ChatGPT Image Aug 22, 2025, 04_28_34 PM_1755895253186.png";
 
 interface ProfileData {
   user: User;
@@ -97,9 +98,18 @@ export default function Profile() {
       <header className="brand-header shadow-lg border-b border-primary/20 sticky top-0 z-40">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-black text-white tracking-wide" data-testid="profile-title" style={{ fontFamily: 'var(--font-display)' }}>
-              🦇 PROFILE
-            </h1>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8">
+                <img 
+                  src={battyLogo} 
+                  alt="Batty" 
+                  className="w-full h-full object-contain animate-wiggle"
+                />
+              </div>
+              <h1 className="text-xl font-black text-white tracking-wide" data-testid="profile-title" style={{ fontFamily: 'var(--font-display)' }}>
+                PROFILE
+              </h1>
+            </div>
             <button
               className="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-xl transition-all hover:scale-105"
               onClick={() => window.location.href = "/api/logout"}

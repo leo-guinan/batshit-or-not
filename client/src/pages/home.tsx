@@ -9,6 +9,7 @@ import SubmissionModal from "@/components/SubmissionModal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { Idea, User } from "@shared/schema";
+import battyLogo from "@assets/ChatGPT Image Aug 22, 2025, 04_28_34 PM_1755895253186.png";
 
 type FeedType = 'fresh' | 'trending' | 'hall-of-fame';
 
@@ -107,8 +108,12 @@ export default function Home() {
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center animate-float">
-                <div className="text-white text-lg animate-wiggle">🦇</div>
+              <div className="w-12 h-12 animate-float">
+                <img 
+                  src={battyLogo} 
+                  alt="Batty" 
+                  className="w-full h-full object-contain animate-wiggle drop-shadow-lg"
+                />
               </div>
               <h1 className="text-xl font-black text-white tracking-wide" data-testid="app-title" style={{ fontFamily: 'var(--font-display)' }}>
                 BATSHIT OR NOT
@@ -212,8 +217,12 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="w-20 h-20 bg-gradient-to-br from-primary to-destructive rounded-xl flex items-center justify-center mx-auto mb-6 animate-float shadow-xl">
-              <div className="text-3xl animate-wiggle">🦇</div>
+            <div className="w-24 h-24 mx-auto mb-6 animate-float">
+              <img 
+                src={battyLogo} 
+                alt="Batty looking confused" 
+                className="w-full h-full object-contain animate-wiggle drop-shadow-2xl"
+              />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-2" style={{ fontFamily: 'var(--font-display)' }}>
               NO IDEAS YET!

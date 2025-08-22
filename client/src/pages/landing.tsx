@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lightbulb, Star, Users, Trophy } from "lucide-react";
+import { Star, Users, Trophy } from "lucide-react";
+import battyLogo from "@assets/ChatGPT Image Aug 22, 2025, 04_28_34 PM_1755895253186.png";
 
 export default function Landing() {
   return (
@@ -8,8 +9,13 @@ export default function Landing() {
       <div className="max-w-md mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="w-24 h-24 bg-gradient-to-br from-primary to-destructive rounded-full flex items-center justify-center mx-auto mb-6 animate-float shadow-xl">
-            <Lightbulb className="w-12 h-12 text-white animate-wiggle" data-testid="logo-icon" />
+          <div className="w-32 h-32 mx-auto mb-6 animate-float">
+            <img 
+              src={battyLogo} 
+              alt="Batty - Batshit or Not mascot" 
+              className="w-full h-full object-contain animate-wiggle drop-shadow-2xl"
+              data-testid="logo-icon" 
+            />
           </div>
           <h1 className="text-5xl font-black text-foreground mb-4 animate-batshit-bounce" data-testid="app-title" style={{ fontFamily: 'var(--font-display)' }}>
             BATSHIT OR NOT
