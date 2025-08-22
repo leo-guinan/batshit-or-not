@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Share, BarChart3 } from "lucide-react";
 import type { Idea, User } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
+import saneButton from "@assets/ChatGPT Image Aug 22, 2025, 06_02_42 PM_1755900175658.png";
+import confusingButton from "@assets/ChatGPT Image Aug 22, 2025, 06_02_40 PM_1755900175658.png";
+import batshitButton from "@assets/ChatGPT Image Aug 22, 2025, 06_02_38 PM_1755900175657.png";
 
 interface IdeaCardProps {
   idea: Idea & { author: User | null };
@@ -13,46 +16,27 @@ interface IdeaCardProps {
   isRatingPending?: boolean;
 }
 
-const RATING_RANGES = [
+const RATING_OPTIONS = [
   { 
-    value: 2, 
-    label: "1-2", 
-    name: "TOO SANE", 
-    color: "text-white shadow-lg", 
+    value: 3, 
+    name: "SANE", 
+    image: saneButton,
     bgColor: "#28A745",
-    shadowColor: "rgba(40, 167, 69, 0.4)"
-  },
-  { 
-    value: 4, 
-    label: "3-4", 
-    name: "QUIRKY AF", 
-    color: "text-white shadow-lg", 
-    bgColor: "#7B4397",
-    shadowColor: "rgba(123, 67, 151, 0.4)"
+    description: "Pretty normal idea"
   },
   { 
     value: 6, 
-    label: "5-6", 
-    name: "WTF?", 
-    color: "text-orange-100 shadow-lg", 
-    bgColor: "#1A1A1A",
-    shadowColor: "rgba(26, 26, 26, 0.6)"
-  },
-  { 
-    value: 8, 
-    label: "7-8", 
-    name: "TOTALLY UNHINGED", 
-    color: "text-white shadow-lg", 
+    name: "CONFUSING", 
+    image: confusingButton,
     bgColor: "#F39C3C",
-    shadowColor: "rgba(243, 156, 60, 0.4)"
+    description: "Wait... what now?"
   },
   { 
     value: 10, 
-    label: "9-10", 
-    name: "FULL BATSHIT", 
-    color: "text-white shadow-xl", 
+    name: "BATSHIT", 
+    image: batshitButton,
     bgColor: "#DC3545",
-    shadowColor: "rgba(220, 53, 69, 0.5)"
+    description: "Absolutely unhinged!"
   },
 ];
 
@@ -180,50 +164,34 @@ export default function IdeaCard({ idea, onRate, isRatingPending }: IdeaCardProp
         {!ratingCheck?.hasRated ? (
           <div className="bg-muted rounded-xl p-4 mb-4">
             <div className="text-center mb-4">
-              <p className="text-sm font-medium text-muted-foreground mb-3">Rate this idea:</p>
+              <p className="text-sm font-medium text-muted-foreground mb-3">How batshit is this idea?</p>
             </div>
             
             {showRatingButtons ? (
-              <div className="relative">
-                {/* Gradient background bar */}
-                <div 
-                  className="absolute inset-x-0 top-1/2 transform -translate-y-1/2 h-3 rounded-full opacity-30"
-                  style={{
-                    background: 'linear-gradient(to right, #28A745, #7B4397, #1A1A1A, #F39C3C, #DC3545)'
-                  }}
-                ></div>
+              <div className="space-y-3">
+                {RATING_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    className="w-full h-20 rounded-2xl transition-all duration-300 ease-out hover:scale-105 active:scale-95 transform-gpu overflow-hidden shadow-lg hover:shadow-xl"
+                    onClick={() => handleRatingClick(option.value)}
+                    disabled={isRatingPending}
+                    data-testid={`rating-button-${option.value}`}
+                  >
+                    <img 
+                      src={option.image} 
+                      alt={option.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
                 
-                {/* Rating buttons */}
-                <div className="relative flex justify-between gap-2 mb-3">
-                  {RATING_RANGES.map((range) => (
-                    <button
-                      key={range.value}
-                      className={`rating-button ${range.color} font-black text-sm tracking-wider flex flex-col items-center justify-center py-3 px-4 rounded-2xl transition-all duration-300 ease-out hover:scale-110 active:scale-95 transform-gpu font-montserrat`}
-                      style={{
-                        backgroundColor: range.bgColor,
-                        boxShadow: `0 4px 12px ${range.shadowColor}, 0 2px 4px rgba(0,0,0,0.1)`
-                      }}
-                      onClick={() => handleRatingClick(range.value)}
-                      disabled={isRatingPending}
-                      data-testid={`rating-button-${range.value}`}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.boxShadow = `0 6px 20px ${range.shadowColor}, 0 4px 8px rgba(0,0,0,0.15)`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.boxShadow = `0 4px 12px ${range.shadowColor}, 0 2px 4px rgba(0,0,0,0.1)`;
-                      }}
-                    >
-                      <span className="text-xs font-bold mb-1">{range.label}</span>
-                      <span className="text-xs font-black leading-tight text-center">{range.name}</span>
-                    </button>
-                  ))}
-                </div>
-                
-                {/* Scale labels */}
-                <div className="flex justify-between text-xs text-muted-foreground px-2">
-                  <span>Boringly Sane</span>
-                  <span>Absolutely Batshit</span>
-                </div>
+                {/* Back to simple rating button */}
+                <button
+                  onClick={() => setShowRatingButtons(false)}
+                  className="w-full text-xs text-muted-foreground hover:text-foreground transition-colors mt-2"
+                >
+                  Choose different way to rate
+                </button>
               </div>
             ) : (
               <Button
