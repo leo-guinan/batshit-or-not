@@ -1,0 +1,308 @@
+# Product Requirements Document: Batshit or Not
+
+## Executive Summary
+
+**Product Name:** Batshit or Not  
+**Product Type:** Web/Mobile Application  
+**Version:** 1.0  
+**Date:** August 2025  
+**Product Owner:** TBD  
+
+### Vision Statement
+Create an entertaining, community-driven platform where users can submit their wildest ideas and have them rated by the crowd on a "batshit crazy" scale, fostering creativity, humor, and engaging social interactions around unconventional thinking.
+
+### Mission
+To build the go-to platform for validating, sharing, and discovering audacious ideas while creating an engaged community that celebrates both practical innovation and delightfully absurd creativity.
+
+## Product Overview
+
+### Problem Statement
+People have wild, unconventional, or seemingly crazy ideas but lack a fun, judgment-free space to share them and get feedback. Traditional social platforms don't provide a structured way to gauge just how "out there" an idea really is, missing the opportunity for entertainment and potential innovation discovery.
+
+### Solution
+A gamified rating platform that allows users to:
+- Submit ideas anonymously or with attribution
+- Rate others' ideas on a 1-10 "batshit scale"
+- Discover trending crazy and brilliant ideas
+- Track their idea ratings and build reputation
+
+### Target Audience
+
+**Primary Users:**
+- Age: 18-35
+- Tech-savvy individuals who enjoy social apps
+- Creative professionals, entrepreneurs, students
+- People who enjoy Reddit, Product Hunt, or similar platforms
+
+**Secondary Users:**
+- Innovation scouts from companies
+- Content creators looking for inspiration
+- Anyone seeking entertainment through creative content
+
+## Core Features
+
+### 1. Idea Submission
+
+**User Stories:**
+- As a user, I want to submit my idea quickly so I can get feedback
+- As a user, I want to add context to my idea so raters understand it better
+
+**Requirements:**
+- Text input (280-1000 characters)
+- Optional image attachment
+- Category selection (Technology, Business, Lifestyle, Science, Art, Social, Other)
+- Optional anonymity toggle
+- Profanity/content filter
+
+### 2. Rating System
+
+**User Stories:**
+- As a rater, I want to quickly rate ideas on the batshit scale
+- As a rater, I want to see how my rating compares to others
+
+**Requirements:**
+- 1-10 scale with creative labels:
+  - 1-2: "Boringly Sane"
+  - 3-4: "Mildly Quirky"
+  - 5-6: "Getting Weird"
+  - 7-8: "Certified Crazy"
+  - 9-10: "Absolutely Batshit"
+- Swipe or tap interface for quick rating
+- Show average rating after user votes
+- Minimum 10 votes before displaying public rating
+
+### 3. Discovery Feed
+
+**User Stories:**
+- As a user, I want to discover trending ideas
+- As a user, I want to filter ideas by category or rating
+
+**Feed Types:**
+- **Fresh:** Newly submitted ideas needing ratings
+- **Trending:** Most rated in last 24 hours
+- **Hall of Fame:** Highest rated all-time
+- **Hall of Insanity:** Most consistently 9-10 rated
+- **Controversial:** Highest standard deviation in ratings
+
+### 4. User Profiles
+
+**User Stories:**
+- As a user, I want to track my submitted ideas
+- As a user, I want to build reputation as an idea generator
+
+**Profile Features:**
+- Username and avatar
+- Bio (optional)
+- Statistics:
+  - Ideas submitted
+  - Average batshit rating
+  - Total ratings received
+  - "Batshit Score" (gamification metric)
+- Idea history
+- Achievements/badges
+
+### 5. Gamification
+
+**Achievement System:**
+- "First Timer" - Submit first idea
+- "Completely Sane" - Get an average rating below 2
+- "Certifiably Insane" - Get an average rating above 9
+- "Idea Machine" - Submit 10, 25, 50, 100 ideas
+- "Judge Judy" - Rate 100, 500, 1000 ideas
+- "Trendsetter" - Have an idea hit trending
+- "Consistency Award" - 5 ideas with similar ratings
+
+**Leaderboards:**
+- Weekly/Monthly/All-time
+- Most Batshit User
+- Most Prolific Submitter
+- Most Active Rater
+
+### 6. Social Features
+
+**Sharing:**
+- Share idea cards on social media
+- Custom share graphics with rating
+- Deep linking to specific ideas
+
+**Comments (Phase 2):**
+- Optional comment section per idea
+- Upvote/downvote comments
+- Report inappropriate content
+
+## Technical Requirements
+
+### Platform Support
+- **Phase 1:** Responsive web application
+- **Phase 2:** iOS and Android native apps
+
+### Performance Requirements
+- Page load time < 2 seconds
+- Rating submission < 500ms
+- Support 10,000 concurrent users
+- 99.9% uptime
+
+### Security & Privacy
+- User authentication (email/social login)
+- Optional anonymous submission
+- GDPR compliant
+- Content moderation system
+- Rate limiting to prevent spam
+
+## User Interface Guidelines
+
+### Design Principles
+- **Fun & Playful:** Bright colors, playful animations
+- **Fast & Fluid:** Gesture-based interactions, minimal clicks
+- **Clear Visual Hierarchy:** Obvious CTAs, readable typography
+- **Mobile-First:** Optimized for one-handed use
+
+### Key Screens
+1. **Onboarding:** 3-step tutorial
+2. **Home Feed:** Swipeable card interface
+3. **Rating Interface:** Large, colorful scale
+4. **Submission Form:** Simple, focused input
+5. **Profile:** Stats dashboard style
+6. **Leaderboards:** Engaging visual rankings
+
+## Analytics & Success Metrics
+
+### Key Performance Indicators (KPIs)
+- **Daily Active Users (DAU)**
+- **Ideas submitted per day**
+- **Ratings per user per session**
+- **User retention (D1, D7, D30)**
+- **Viral coefficient (shares leading to new users)**
+
+### Success Metrics
+- Month 1: 1,000 registered users, 500 ideas
+- Month 3: 10,000 users, 5,000 ideas
+- Month 6: 50,000 users, 25,000 ideas
+- Average session time > 5 minutes
+- Rating participation > 60% of active users
+
+## Monetization Strategy
+
+### Phase 1: Growth Focus
+- Free to use all core features
+- Optional tip jar for server costs
+
+### Phase 2: Revenue Generation
+- **Premium Subscription ($4.99/month):**
+  - Advanced analytics on your ideas
+  - Early access to trending ideas
+  - Custom badges and profile themes
+  - No ads
+- **Sponsored Categories:** Companies pay for branded challenges
+- **API Access:** For innovation scouts and researchers
+
+## Content Moderation
+
+### Automated Systems
+- Profanity filter
+- Spam detection
+- Duplicate idea detection
+
+### Community Moderation
+- Report button on all content
+- Community guidelines
+- Trusted user moderator program
+
+### Prohibited Content
+- Hate speech or discrimination
+- Illegal activities
+- Personal information
+- Spam or commercial promotion
+- NSFW content without proper tags
+
+## Launch Strategy
+
+### MVP Features (Month 1)
+- Basic submission and rating
+- Simple feed (Fresh/Trending)
+- User registration
+- Basic profiles
+
+### Phase 2 (Month 2-3)
+- Full gamification system
+- Social sharing
+- Category filtering
+- Leaderboards
+
+### Phase 3 (Month 4-6)
+- Mobile apps
+- Comments system
+- Premium features
+- API development
+
+## Risk Analysis
+
+### Technical Risks
+- **Scaling issues:** Mitigate with cloud infrastructure
+- **Content moderation at scale:** Implement ML-based filtering
+
+### Business Risks
+- **Low user engagement:** Address with improved gamification
+- **Inappropriate content:** Strong moderation policies
+- **Copycat apps:** Build strong brand and community
+
+### Mitigation Strategies
+- Regular user feedback loops
+- A/B testing all major features
+- Strong community guidelines
+- Quick iteration based on metrics
+
+## Competition Analysis
+
+### Direct Competitors
+- Reddit (r/CrazyIdeas)
+- Product Hunt (for serious ideas)
+- Various "Rate My" apps
+
+### Competitive Advantages
+- Focused specifically on crazy/creative ideas
+- Gamified rating system
+- Clean, fast, mobile-optimized interface
+- Strong community features
+
+## Development Timeline
+
+**Month 1:** MVP Development
+- Core infrastructure
+- Basic features
+- Alpha testing
+
+**Month 2:** Beta Launch
+- Limited user rollout
+- Feedback incorporation
+- Bug fixes
+
+**Month 3:** Public Launch
+- Marketing campaign
+- Press outreach
+- Influencer partnerships
+
+**Month 4-6:** Growth & Optimization
+- Feature expansion
+- Platform scaling
+- Mobile app development
+
+## Team Requirements
+
+### Core Team
+- Product Manager
+- 2 Full-stack developers
+- 1 UI/UX Designer
+- 1 Community Manager
+- 1 Marketing Specialist
+
+### Future Hires
+- Mobile developers (iOS/Android)
+- Data analyst
+- Additional moderators
+
+## Conclusion
+
+Batshit or Not represents a unique opportunity to create an engaging platform that celebrates creativity and unconventional thinking. By combining simple mechanics with strong gamification and community features, we can build a sustainable, entertaining product that fills a gap in the current social app ecosystem.
+
+The key to success will be maintaining the delicate balance between encouraging truly creative ideas and keeping content quality high through effective moderation. With proper execution, this platform can become the definitive destination for anyone looking to validate their wildest ideas or simply be entertained by human creativity at its most unfiltered.
