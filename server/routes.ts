@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertIdeaSchema, insertRatingSchema } from "@shared/schema";
+import { insertIdeaSchema, insertRatingSchema, insertFriendshipSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -161,6 +161,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching profile:", error);
       res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  // Friendship routes
+  app.get("/api/friends", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const friends = await storage.getFriends(userId);
+      res.json(friends);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+      res.status(500).json({ message: "Failed to fetch friends" });
+    }
+  });
+
+  app.get("/api/friends/requests", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const requests = await storage.getPendingFriendRequests(userId);
+      res.json(requests);
+    } catch (error) {
+      console.error("Error fetching friend requests:", error);
+      res.status(500).json({ message: "Failed to fetch friend requests" });
+    }
+  });
+
+  app.post("/api/friends/request", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { friendId } = req.body;
+      
+      if (!friendId) {
+        return res.status(400).json({ message: "Friend ID is required" });
+      }
+      
+      if (userId === friendId) {
+        return res.status(400).json({ message: "Cannot send friend request to yourself" });
+      }
+      
+      const friendship = await storage.sendFriendRequest(userId, friendId);
+      res.status(201).json(friendship);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Friendship already exists or pending") {
+        return res.status(409).json({ message: error.message });
+      }
+      console.error("Error sending friend request:", error);
+      res.status(500).json({ message: "Failed to send friend request" });
+    }
+  });
+
+  app.put("/api/friends/requests/:friendshipId", isAuthenticated, async (req: any, res) => {
+    try {
+      const { friendshipId } = req.params;
+      const { status } = req.body;
+      
+      if (!['accepted', 'rejected'].includes(status)) {
+        return res.status(400).json({ message: "Status must be 'accepted' or 'rejected'" });
+      }
+      
+      const friendship = await storage.respondToFriendRequest(friendshipId, status);
+      res.json(friendship);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Friendship not found") {
+        return res.status(404).json({ message: error.message });
+      }
+      console.error("Error responding to friend request:", error);
+      res.status(500).json({ message: "Failed to respond to friend request" });
+    }
+  });
+
+  app.delete("/api/friends/:friendId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { friendId } = req.params;
+      
+      await storage.removeFriend(userId, friendId);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error removing friend:", error);
+      res.status(500).json({ message: "Failed to remove friend" });
+    }
+  });
+
+  app.get("/api/users/search", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const query = req.query.q as string;
+      
+      if (!query || query.length < 2) {
+        return res.status(400).json({ message: "Search query must be at least 2 characters" });
+      }
+      
+      const users = await storage.searchUsers(query, userId);
+      res.json(users);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      res.status(500).json({ message: "Failed to search users" });
     }
   });
 

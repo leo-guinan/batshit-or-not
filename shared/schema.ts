@@ -67,11 +67,22 @@ export const userStats = pgTable("user_stats", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const friendships = pgTable("friendships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  friendId: varchar("friend_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  status: varchar("status").notNull().default("pending"), // pending, accepted, rejected
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   ideas: many(ideas),
   ratings: many(ratings),
   stats: one(userStats),
+  friendshipsInitiated: many(friendships, { relationName: "friendshipsInitiated" }),
+  friendshipsReceived: many(friendships, { relationName: "friendshipsReceived" }),
 }));
 
 export const ideasRelations = relations(ideas, ({ one, many }) => ({
@@ -100,6 +111,19 @@ export const userStatsRelations = relations(userStats, ({ one }) => ({
   }),
 }));
 
+export const friendshipsRelations = relations(friendships, ({ one }) => ({
+  user: one(users, {
+    fields: [friendships.userId],
+    references: [users.id],
+    relationName: "friendshipsInitiated",
+  }),
+  friend: one(users, {
+    fields: [friendships.friendId],
+    references: [users.id],
+    relationName: "friendshipsReceived",
+  }),
+}));
+
 // Zod schemas
 export const insertIdeaSchema = createInsertSchema(ideas, {
   text: z.string().min(10).max(1000),
@@ -117,6 +141,13 @@ export const insertRatingSchema = createInsertSchema(ratings, {
   rating: true,
 });
 
+export const insertFriendshipSchema = createInsertSchema(friendships, {
+  status: z.enum(["pending", "accepted", "rejected"]),
+}).pick({
+  friendId: true,
+  status: true,
+});
+
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertIdea = z.infer<typeof insertIdeaSchema>;
@@ -124,3 +155,5 @@ export type Idea = typeof ideas.$inferSelect;
 export type InsertRating = z.infer<typeof insertRatingSchema>;
 export type Rating = typeof ratings.$inferSelect;
 export type UserStats = typeof userStats.$inferSelect;
+export type InsertFriendship = z.infer<typeof insertFriendshipSchema>;
+export type Friendship = typeof friendships.$inferSelect;
