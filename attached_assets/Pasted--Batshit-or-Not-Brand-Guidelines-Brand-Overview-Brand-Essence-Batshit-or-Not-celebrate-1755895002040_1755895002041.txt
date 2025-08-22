@@ -1,0 +1,260 @@
+# Batshit or Not Brand Guidelines
+
+## Brand Overview
+
+### Brand Essence
+**Batshit or Not** celebrates the beautiful chaos of human creativity. We're the home for ideas that make you go "that's either brilliant or completely insane" - and we love both equally.
+
+### Brand Personality
+- **Playfully Unhinged**: We embrace the crazy with a wink and a smile
+- **Irreverently Smart**: Intelligent humor that doesn't take itself too seriously  
+- **Boldly Inclusive**: All ideas welcome, no matter how wild
+- **Energetically Chaotic**: High energy, fast-paced, never boring
+- **Mischievously Fun**: Like that friend who dares you to do something silly
+
+## Logo Guidelines
+
+### Primary Logo
+The Batshit or Not logo features our mascot "Batty" - a wide-eyed, tongue-wagging bat that embodies the perfect balance of crazy and lovable.
+
+### Logo Elements
+- **The Bat Character**: Black silhouette with exaggerated features
+  - Wide, bulging eyes (cream/yellow)
+  - Wild expression with visible fangs
+  - Playful red tongue extending out
+  - Asymmetric, energetic wing position
+- **Typography**: Bold, chunky sans-serif in all caps
+- **Lockup**: Character centered above text
+
+### Logo Usage Rules
+- **Minimum Size**: No smaller than 120px wide for digital, 1 inch for print
+- **Clear Space**: Maintain clear space equal to the height of the letter "B" around entire logo
+- **Don't**: 
+  - Rotate or skew the logo
+  - Change the proportions
+  - Separate Batty from the text in primary usage
+  - Add effects like drop shadows or gradients
+
+### Logo Variations
+1. **Primary**: Full color on orange background (as shown)
+2. **Reversed**: Orange logo on black background
+3. **Monochrome**: All black on white or all white on black
+4. **Icon Only**: Batty alone for app icons and avatars
+5. **Horizontal**: Batty to the left of text for headers
+
+## Color Palette
+
+### Primary Colors
+- **Batshit Orange**: #F39C3C
+  - *Usage*: Primary brand color, backgrounds, CTAs
+  - *Meaning*: Energy, creativity, boldness
+  
+- **Midnight Black**: #1A1A1A  
+  - *Usage*: Text, UI elements, Batty himself
+  - *Meaning*: Mystery, edge, contrast
+
+- **Crazy Cream**: #F5E6C8
+  - *Usage*: Batty's eyes, highlights, secondary backgrounds
+  - *Meaning*: Approachability, warmth
+
+### Secondary Colors
+- **Tongue Red**: #DC3545
+  - *Usage*: Alerts, high ratings, excitement
+  - *Meaning*: Passion, intensity, "hot" ideas
+
+- **Genius Purple**: #7B4397
+  - *Usage*: Premium features, special badges
+  - *Meaning*: Creativity, imagination
+
+- **Safe Green**: #28A745  
+  - *Usage*: "Sane" ratings, success messages
+  - *Meaning*: Stability, approval
+
+### UI Grays
+- Gray 100: #F8F9FA (Backgrounds)
+- Gray 300: #DEE2E6 (Borders)
+- Gray 500: #ADB5BD (Disabled states)
+- Gray 700: #495057 (Secondary text)
+- Gray 900: #212529 (Primary text alternative)
+
+## Typography
+
+### Primary Typeface
+**Montserrat Black** (or similar geometric sans-serif)
+- Headlines and logo
+- All caps for maximum impact
+- Letter-spacing: 0.02em
+
+### Secondary Typeface  
+**Inter** (or similar clean sans-serif)
+- Body text and UI elements
+- Weights: Regular (400), Medium (500), Bold (700)
+- Optimal reading size: 16px minimum
+
+### Type Hierarchy
+- **H1**: 48-64px - Montserrat Black
+- **H2**: 32-40px - Montserrat Bold  
+- **H3**: 24-28px - Inter Bold
+- **Body**: 16-18px - Inter Regular
+- **Caption**: 12-14px - Inter Medium
+
+## Voice & Tone
+
+### Brand Voice Principles
+1. **Embrace the Absurd**: Never afraid to acknowledge when something is ridiculous
+2. **Celebrate Chaos**: Find joy in the unpredictable
+3. **Stay Playful**: Serious about fun, never mean-spirited
+4. **Be Direct**: Cut through BS (except the good kind)
+5. **Champion Creativity**: Every idea deserves its moment
+
+### Messaging Examples
+
+**DO Say:**
+- "That idea is absolutely batshit... and we love it!"
+- "Rate this beautiful disaster"
+- "Welcome to the chaos"
+- "Sanity is overrated anyway"
+- "Your daily dose of delightful insanity"
+
+**DON'T Say:**
+- "Submit your innovative concepts" (too corporate)
+- "This idea is stupid" (mean-spirited)
+- "Think outside the box" (cliché)
+- "Ideation platform" (buzzword heavy)
+
+### Copywriting Guidelines
+- Short, punchy sentences
+- Embrace contradictions and wordplay
+- Use active voice
+- Include surprise elements
+- Reference bats, wings, caves, or night themes when natural
+- Okay to use mild profanity in appropriate contexts
+
+## Visual Style
+
+### Photography/Illustration Style
+- High contrast, vibrant colors
+- Slightly surreal or unexpected elements
+- Candid, chaotic energy over posed perfection
+- Meme-friendly and shareable
+- Hand-drawn doodles and sketches welcome
+
+### Iconography
+- Thick, rounded lines matching logo style
+- Slightly exaggerated proportions
+- Playful and expressive
+- Two-tone when possible (black + accent color)
+
+### UI Patterns
+- **Cards**: Rounded corners (12px radius)
+- **Buttons**: Bold, chunky with slight shadow
+- **Animations**: Bouncy, springy easing (no linear)
+- **Interactions**: Exaggerated feedback (scale, rotate)
+
+## Brand Applications
+
+### App Interface
+- Orange header bar with black logo
+- Card-based idea display
+- Large, visual rating scale with bat wings as indicators
+- Generous white space to let content breathe
+- Playful micro-interactions (Batty's eyes follow cursor/tap)
+
+### Social Media
+- **Profile Image**: Batty icon on orange circle
+- **Cover Photos**: Pattern of floating ideas with Batty
+- **Post Templates**: Orange borders with corner Batty watermark
+- **Hashtags**: #BatshitOrNot #RateMyInsanity #BattyIdeas
+
+### Marketing Materials
+- **Business Cards**: Black on orange or orange on black
+- **Swag**: Emphasis on Batty character (stickers, pins, shirts)
+- **Presentations**: Dark backgrounds with orange accents
+- **Email Signatures**: Horizontal logo with tagline
+
+## Mascot Guidelines
+
+### "Batty" Character Usage
+- Can appear in various poses and expressions
+- Always maintains core features (big eyes, visible fangs)
+- Can interact with UI elements (hanging from top, peeking from sides)
+- Seasonal variations allowed (Santa hat, sunglasses, etc.)
+- Should appear delighted by chaos, never angry or mean
+
+### Batty Expressions
+1. **Classic**: Tongue out, wide-eyed (default)
+2. **Mind Blown**: Eyes spiral, wings spread wide
+3. **Thinking**: One eyebrow raised, wing on chin
+4. **Celebrating**: Confetti, party hat
+5. **Sleeping**: Upside down, small "Z"s
+
+## Motion Principles
+
+### Animation Guidelines
+- **Timing**: Snappy and energetic (300-500ms for most transitions)
+- **Easing**: Ease-out-back for playful bounce
+- **Personality**: Slightly unpredictable, never perfectly symmetric
+- **Loading States**: Batty flying in circles or doing loops
+- **Success States**: Batty does a flip or wing dance
+- **Error States**: Batty shrugs with confused expression
+
+## Partnership & Co-Branding
+
+### Co-Branding Rules
+- Batty must maintain minimum 50% of original size
+- Cannot alter Batty's core design
+- Partner logos must be clearly separated
+- Maintain brand voice even in professional contexts
+- "Powered by Batshit or Not" lockup available
+
+## Legal & Compliance
+
+### Trademark Usage
+- ™ symbol on first use in marketing materials
+- ® symbol once registered
+- "Batshit or Not" always written as three words
+- Capitalize B, O, and N in headlines
+
+### Content Guidelines
+- Age rating: 13+ (mild profanity, user-generated content)
+- Include disclaimer for user-generated ideas
+- Respect intellectual property in all communications
+- Community guidelines must be prominently displayed
+
+## Brand Evolution
+
+### Seasonal Campaigns
+- **Halloween**: Batty in full glory (our Super Bowl)
+- **April Fools**: Extra chaotic energy
+- **New Year**: "New Year, New Crazy Ideas"
+- **Summer**: "Too Hot to Be Sane"
+
+### Future Considerations
+- Animated Batty for video content
+- AR filters with Batty elements
+- Merchandise line featuring top-rated ideas
+- Batty emoji pack for messaging apps
+
+## Quick Reference Checklist
+
+Before publishing any branded content, ensure:
+- [ ] Batty looks friendly and fun, never menacing
+- [ ] Orange is prominent and vibrant
+- [ ] Copy embraces playful chaos
+- [ ] Design has breathing room - not too cluttered
+- [ ] Message celebrates creativity over criticism
+- [ ] Visual style matches brand energy
+- [ ] Appropriate level of "insanity" for context
+
+## Contact
+
+For brand questions or asset requests:
+- Email: brand@batshitornot.com
+- Brand Portal: brand.batshitornot.com
+- Emergency Batty Hotline: 1-800-BATSHIT
+
+---
+
+*"Remember: In a world of boring sanity, be proudly batshit!"*
+
+*Last Updated: August 2025 | Version 1.0*

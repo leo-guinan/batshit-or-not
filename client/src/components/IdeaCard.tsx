@@ -14,11 +14,11 @@ interface IdeaCardProps {
 }
 
 const RATING_RANGES = [
-  { value: 2, label: "1-2", name: "Sane", color: "bg-success text-white", hoverColor: "hover:bg-success/90" },
-  { value: 4, label: "3-4", name: "Quirky", color: "bg-secondary text-white", hoverColor: "hover:bg-secondary/90" },
-  { value: 6, label: "5-6", name: "Weird", color: "bg-accent text-accent-foreground", hoverColor: "hover:bg-accent/90" },
-  { value: 8, label: "7-8", name: "Crazy", color: "bg-orange-500 text-white", hoverColor: "hover:bg-orange-600" },
-  { value: 10, label: "9-10", name: "Batshit", color: "bg-primary text-white", hoverColor: "hover:bg-primary/90" },
+  { value: 2, label: "1-2", name: "Sane", color: "bg-gradient-to-r from-success to-success/80 text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
+  { value: 4, label: "3-4", name: "Quirky", color: "bg-gradient-to-r from-secondary to-secondary/80 text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
+  { value: 6, label: "5-6", name: "Weird", color: "bg-gradient-to-r from-accent to-primary/60 text-foreground shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
+  { value: 8, label: "7-8", name: "Crazy", color: "bg-gradient-to-r from-primary to-destructive text-white shadow-lg", hoverColor: "hover:shadow-xl hover:scale-105" },
+  { value: 10, label: "9-10", name: "Batshit", color: "bg-gradient-to-r from-destructive to-primary text-white shadow-xl border-2 border-destructive/50", hoverColor: "hover:shadow-2xl hover:scale-110 hover:rotate-2" },
 ];
 
 const CATEGORY_COLORS = {

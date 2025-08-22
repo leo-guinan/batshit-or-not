@@ -103,28 +103,30 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card shadow-sm border-b border-border sticky top-0 z-40">
-        <div className="max-w-md mx-auto px-4 py-3">
+      <header className="brand-header shadow-lg border-b border-primary/20 sticky top-0 z-40">
+        <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                <div className="text-white text-sm">💡</div>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center animate-float">
+                <div className="text-white text-lg animate-wiggle">🦇</div>
               </div>
-              <h1 className="text-xl font-bold text-foreground" data-testid="app-title">Batshit or Not</h1>
+              <h1 className="text-xl font-black text-white tracking-wide" data-testid="app-title" style={{ fontFamily: 'var(--font-display)' }}>
+                BATSHIT OR NOT
+              </h1>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="relative p-2 text-muted-foreground">
-                <div className="text-sm">🔔</div>
+              <div className="relative p-2 text-white/80 hover:text-white transition-colors">
+                <div className="text-lg animate-bounce-gentle">🔔</div>
               </div>
               {user?.profileImageUrl ? (
                 <img 
                   src={user.profileImageUrl} 
                   alt="User avatar" 
-                  className="w-8 h-8 rounded-full border-2 border-secondary object-cover"
+                  className="w-10 h-10 rounded-xl border-2 border-white/30 object-cover hover:scale-110 transition-transform"
                   data-testid="user-avatar"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white text-sm font-semibold">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white text-sm font-bold hover:scale-110 transition-transform">
                   {user?.firstName?.[0] || user?.email?.[0] || '?'}
                 </div>
               )}
@@ -134,40 +136,40 @@ export default function Home() {
       </header>
 
       {/* Feed Tabs */}
-      <div className="max-w-md mx-auto px-4 py-4 bg-card border-b border-border">
-        <div className="flex space-x-2 bg-muted rounded-full p-1">
+      <div className="max-w-md mx-auto px-4 py-4 bg-gradient-to-r from-accent/50 to-background border-b border-border">
+        <div className="flex space-x-2 bg-muted/80 rounded-xl p-2 shadow-inner">
           <button
-            className={`flex-1 py-2 px-4 rounded-full font-medium text-sm transition-all ${
+            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all transform hover:scale-105 ${
               currentFeed === 'fresh' 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-muted-foreground hover:bg-card'
+                ? 'bg-gradient-to-r from-primary to-destructive text-white shadow-lg' 
+                : 'text-muted-foreground hover:bg-card hover:text-foreground'
             }`}
             onClick={() => setCurrentFeed('fresh')}
             data-testid="tab-fresh"
           >
-            🔥 Fresh
+            🔥 FRESH
           </button>
           <button
-            className={`flex-1 py-2 px-4 rounded-full font-medium text-sm transition-all ${
+            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all transform hover:scale-105 ${
               currentFeed === 'trending' 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-muted-foreground hover:bg-card'
+                ? 'bg-gradient-to-r from-primary to-destructive text-white shadow-lg' 
+                : 'text-muted-foreground hover:bg-card hover:text-foreground'
             }`}
             onClick={() => setCurrentFeed('trending')}
             data-testid="tab-trending"
           >
-            📈 Trending
+            📈 TRENDING
           </button>
           <button
-            className={`flex-1 py-2 px-4 rounded-full font-medium text-sm transition-all ${
+            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all transform hover:scale-105 ${
               currentFeed === 'hall-of-fame' 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-muted-foreground hover:bg-card'
+                ? 'bg-gradient-to-r from-primary to-destructive text-white shadow-lg' 
+                : 'text-muted-foreground hover:bg-card hover:text-foreground'
             }`}
             onClick={() => setCurrentFeed('hall-of-fame')}
             data-testid="tab-hall-of-fame"
           >
-            🏆 Fame
+            🏆 FAME
           </button>
         </div>
       </div>
@@ -210,27 +212,31 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <div className="text-2xl">💡</div>
+            <div className="w-20 h-20 bg-gradient-to-br from-primary to-destructive rounded-xl flex items-center justify-center mx-auto mb-6 animate-float shadow-xl">
+              <div className="text-3xl animate-wiggle">🦇</div>
             </div>
-            <p className="text-muted-foreground mb-4">No ideas yet in this feed</p>
-            <Button
+            <h3 className="text-xl font-bold text-foreground mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              NO IDEAS YET!
+            </h3>
+            <p className="text-muted-foreground mb-6">The chaos awaits your brilliant madness</p>
+            <button
               onClick={() => setIsSubmissionModalOpen(true)}
+              className="batshit-button animate-batshit-bounce"
               data-testid="button-submit-first-idea"
             >
-              Submit the first idea!
-            </Button>
+              🚀 Submit the First Idea!
+            </button>
           </div>
         )}
       </main>
 
       {/* Floating Action Button */}
       <button
-        className="fixed bottom-20 right-4 w-14 h-14 bg-gradient-to-br from-primary to-secondary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform animate-pulse-slow"
+        className="fixed bottom-20 right-4 w-16 h-16 bg-gradient-to-br from-primary via-destructive to-secondary text-white rounded-xl shadow-xl flex items-center justify-center hover:scale-110 hover:rotate-12 transition-all animate-float border-2 border-white/20"
         onClick={() => setIsSubmissionModalOpen(true)}
         data-testid="button-add-idea"
       >
-        <Plus className="w-6 h-6" />
+        <Plus className="w-8 h-8 animate-crazy-shake" />
       </button>
 
       {/* Navigation */}

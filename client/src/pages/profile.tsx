@@ -94,18 +94,19 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card shadow-sm border-b border-border sticky top-0 z-40">
-        <div className="max-w-md mx-auto px-4 py-3">
+      <header className="brand-header shadow-lg border-b border-primary/20 sticky top-0 z-40">
+        <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-foreground" data-testid="profile-title">Profile</h1>
-            <Button
-              variant="ghost"
-              size="sm"
+            <h1 className="text-xl font-black text-white tracking-wide" data-testid="profile-title" style={{ fontFamily: 'var(--font-display)' }}>
+              🦇 PROFILE
+            </h1>
+            <button
+              className="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-xl transition-all hover:scale-105"
               onClick={() => window.location.href = "/api/logout"}
               data-testid="button-logout"
             >
               Logout
-            </Button>
+            </button>
           </div>
         </div>
       </header>

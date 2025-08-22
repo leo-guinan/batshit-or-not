@@ -126,17 +126,17 @@ export default function SubmissionModal({ isOpen, onClose }: SubmissionModalProp
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto" data-testid="submission-modal">
-        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <DialogTitle className="text-xl font-bold text-foreground">Share Your Wild Idea</DialogTitle>
-          <Button
-            variant="ghost"
-            size="sm"
+        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
+          <DialogTitle className="text-2xl font-black text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
+            🦇 SHARE YOUR WILD IDEA
+          </DialogTitle>
+          <button
             onClick={handleClose}
-            className="h-6 w-6 p-0"
+            className="h-8 w-8 rounded-xl bg-muted hover:bg-destructive/20 flex items-center justify-center transition-all hover:scale-110"
             data-testid="button-close-modal"
           >
             <X className="h-4 w-4" />
-          </Button>
+          </button>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -209,24 +209,23 @@ export default function SubmissionModal({ isOpen, onClose }: SubmissionModalProp
           </div>
 
           {/* Actions */}
-          <div className="flex space-x-3 pt-4">
-            <Button
+          <div className="flex space-x-3 pt-6">
+            <button
               type="button"
-              variant="outline"
               onClick={handleClose}
-              className="flex-1"
+              className="flex-1 py-3 px-6 rounded-xl border-2 border-muted hover:border-primary transition-all font-bold text-muted-foreground hover:text-primary"
               data-testid="button-cancel"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               disabled={submitMutation.isPending || isOverLimit || isUnderMinimum || !formData.text.trim()}
-              className="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              className="batshit-button flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="button-submit"
             >
-              {submitMutation.isPending ? "Sharing..." : "Share Idea"}
-            </Button>
+              {submitMutation.isPending ? "🦇 Sharing..." : "🚀 Share Idea"}
+            </button>
           </div>
         </form>
       </DialogContent>

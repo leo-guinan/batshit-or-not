@@ -4,60 +4,60 @@ import { Lightbulb, Star, Users, Trophy } from "lucide-react";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/10 to-secondary/10">
       <div className="max-w-md mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-slow">
-            <Lightbulb className="w-10 h-10 text-white" data-testid="logo-icon" />
+          <div className="w-24 h-24 bg-gradient-to-br from-primary to-destructive rounded-full flex items-center justify-center mx-auto mb-6 animate-float shadow-xl">
+            <Lightbulb className="w-12 h-12 text-white animate-wiggle" data-testid="logo-icon" />
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4" data-testid="app-title">
-            Batshit or Not
+          <h1 className="text-5xl font-black text-foreground mb-4 animate-batshit-bounce" data-testid="app-title" style={{ fontFamily: 'var(--font-display)' }}>
+            BATSHIT OR NOT
           </h1>
-          <p className="text-xl text-muted-foreground mb-8" data-testid="app-subtitle">
-            Rate wild ideas on the crazy scale
+          <p className="text-xl text-muted-foreground mb-8 font-medium" data-testid="app-subtitle">
+            Rate wild ideas on the crazy scale! 🦇
           </p>
         </div>
 
         {/* Features */}
-        <div className="space-y-4 mb-12">
-          <Card className="border-2 border-primary/20 hover:border-primary/40 transition-colors">
+        <div className="space-y-6 mb-12">
+          <Card className="border-2 border-primary/30 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300 hover:rotate-1 rounded-xl">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Star className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 bg-gradient-to-br from-primary to-destructive rounded-xl flex items-center justify-center animate-bounce-gentle">
+                  <Star className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Rate Ideas</h3>
-                  <p className="text-sm text-muted-foreground">From boringly sane to absolutely batshit</p>
+                  <h3 className="font-bold text-foreground text-lg">Rate Ideas</h3>
+                  <p className="text-sm text-muted-foreground">From boringly sane to absolutely batshit! 🤯</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-2 border-secondary/20 hover:border-secondary/40 transition-colors">
+          <Card className="border-2 border-secondary/30 hover:border-secondary shadow-lg hover:shadow-xl transition-all duration-300 hover:-rotate-1 rounded-xl">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-secondary" />
+                <div className="w-14 h-14 bg-gradient-to-br from-secondary to-primary rounded-xl flex items-center justify-center animate-pulse-slow">
+                  <Users className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Share & Discover</h3>
-                  <p className="text-sm text-muted-foreground">Submit your wildest ideas to the community</p>
+                  <h3 className="font-bold text-foreground text-lg">Share & Discover</h3>
+                  <p className="text-sm text-muted-foreground">Submit your wildest ideas to the chaos! 🚀</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-2 border-accent/20 hover:border-accent/40 transition-colors">
+          <Card className="border-2 border-success/30 hover:border-success shadow-lg hover:shadow-xl transition-all duration-300 hover:rotate-1 rounded-xl">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-accent" />
+                <div className="w-14 h-14 bg-gradient-to-br from-success to-secondary rounded-xl flex items-center justify-center animate-crazy-shake">
+                  <Trophy className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Earn Achievements</h3>
-                  <p className="text-sm text-muted-foreground">Build your reputation as an idea generator</p>
+                  <h3 className="font-bold text-foreground text-lg">Earn Achievements</h3>
+                  <p className="text-sm text-muted-foreground">Build your batshit reputation! 🏆</p>
                 </div>
               </div>
             </CardContent>
@@ -66,16 +66,15 @@ export default function Landing() {
 
         {/* CTA */}
         <div className="text-center">
-          <Button
-            size="lg"
-            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:opacity-90 animate-bounce-gentle"
+          <button
+            className="batshit-button w-full h-16 text-xl uppercase tracking-wide animate-batshit-bounce"
             onClick={() => window.location.href = "/api/login"}
             data-testid="login-button"
           >
-            Get Started
-          </Button>
-          <p className="text-xs text-muted-foreground mt-4">
-            Join the community of creative minds
+            🦇 Join the Chaos! 🦇
+          </button>
+          <p className="text-sm text-muted-foreground mt-4 font-medium">
+            Welcome to the beautiful madness! 🎪
           </p>
         </div>
       </div>
