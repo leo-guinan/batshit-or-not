@@ -33,29 +33,26 @@
           "envVariables": {
             "NODE_ENV": "production",
             "PORT": "5000",
-            "SESSION_SECRET": {
-              "fromParameterStore": "batshit-session-secret"
-            },
-            "DATABASE_URL": {
-              "fromDatabase": "batshit-postgres"
+           "DATABASE_URL": {
+              "fromService": {
+                "id": "db",
+                "value": "dbConnectionString"
+              }
             }
           }
-        }
-      ],
-      "databases": [
+        },
         {
-          "id": "batshit-postgres",
-          "name": "Batshit Database",
+          "id": "db",
+          "name": "Database",
           "type": "rds",
           "engine": "postgres",
-          "engineVersion": "15",
-          "instanceClass": "db.t4g.micro",
+          "engineVersion": "12",
+          "instanceSize": "db.t4g.micro",
           "storage": 20,
-          "private": true,
-          "deletionProtection": true,
-          "backupRetentionPeriod": 7
+          "private": false
         }
       ]
+    
     }
   ]
 }
