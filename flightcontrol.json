@@ -50,7 +50,7 @@
           "type": "rds",
           "engine": "postgres",
           "engineVersion": "15",
-          "instanceClass": "db.t4g.micro",
+          "instanceSize": "db.t4g.micro",
           "storage": 20,
           "private": false
         }
