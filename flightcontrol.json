@@ -43,9 +43,7 @@
               }
             }
           }
-        }
-      ],
-      "databases": [
+        },
         {
           "id": "db",
           "name": "Database",
