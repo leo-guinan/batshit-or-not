@@ -28,12 +28,8 @@
           "healthCheckTimeout": 10,
           "healthCheckHealthyThreshold": 2,
           "envVariables": {
-            "NODE_ENV": {
-              "value": "production"
-            },
-            "PORT": {
-              "value": "5000"
-            },
+            "NODE_ENV": "production",
+            "PORT": "5000",
             "SESSION_SECRET": {
               "fromParameterStore": "batshit-session-secret"
             },
@@ -89,12 +85,8 @@
           "healthCheckTimeout": 10,
           "healthCheckHealthyThreshold": 2,
           "envVariables": {
-            "NODE_ENV": {
-              "value": "development"
-            },
-            "PORT": {
-              "value": "5000"
-            },
+            "NODE_ENV": "development",
+            "PORT": "5000",
             "SESSION_SECRET": {
               "fromParameterStore": "batshit-session-secret-staging"
             },
