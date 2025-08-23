@@ -2,7 +2,7 @@
   "$schema": "https://app.flightcontrol.dev/schema.json",
   "environments": [
     {
-      "id": "production",
+      "id": "prod",
       "name": "Production",
       "region": "us-west-2",
       "source": {
@@ -10,8 +10,8 @@
       },
       "services": [
         {
-          "id": "app",
-          "name": "Batshit or Not",
+          "id": "web",
+          "name": "Web Service",
           "type": "fargate",
           "buildType": "nixpacks",
           "cpu": 0.5,
@@ -26,25 +26,20 @@
             "SESSION_SECRET": {
               "fromParameterStore": "batshit-session-secret"
             }
-          },
-          "databaseConnections": [
-            {
-              "databaseId": "db",
-              "envVarName": "DATABASE_URL"
-            }
-          ]
+          }
         }
       ],
       "databases": [
         {
-          "id": "db",
-          "name": "postgres",
+          "id": "postgres",
+          "name": "Database",
           "type": "rds",
           "engine": "postgres",
           "engineVersion": "15",
           "instanceClass": "db.t4g.micro",
           "storage": 20,
-          "private": false
+          "private": false,
+          "connectionStringEnvVar": "DATABASE_URL"
         }
       ]
     }
