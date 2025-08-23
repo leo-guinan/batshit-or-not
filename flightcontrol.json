@@ -37,7 +37,10 @@
               "fromParameterStore": "batshit-session-secret"
             },
             "DATABASE_URL": {
-              "fromDatabase": "db"
+             "fromService": {
+                "id": "db",
+                "value": "dbConnectionString"
+              }
             }
           }
         }
