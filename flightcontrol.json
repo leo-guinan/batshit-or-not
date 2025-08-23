@@ -10,23 +10,16 @@
       },
       "services": [
         {
-          "id": "batshit-app",
-          "name": "Batshit or Not App",
+          "id": "app",
+          "name": "Batshit or Not",
           "type": "fargate",
           "buildType": "nixpacks",
           "cpu": 0.5,
           "memory": 1,
           "minInstances": 1,
           "maxInstances": 3,
-          "autoscaling": {
-            "targetCPU": 70,
-            "targetMemory": 80
-          },
           "port": 5000,
           "healthCheckPath": "/health",
-          "healthCheckInterval": 30,
-          "healthCheckTimeout": 10,
-          "healthCheckHealthyThreshold": 2,
           "envVariables": {
             "NODE_ENV": "production",
             "PORT": "5000",
@@ -34,31 +27,24 @@
               "fromParameterStore": "batshit-session-secret"
             },
             "DATABASE_URL": {
-              "fromService": {
-                "id": "batshit-db",
-                "value": "dbConnectionString"
+              "fromDatabase": {
+                "id": "db",
+                "attribute": "connectionString"
               }
             }
-          },
-          "buildCommand": "npm run build",
-          "startCommand": "npm start",
-          "installCommand": "npm ci"
+          }
         }
       ],
       "databases": [
         {
-          "id": "batshit-db",
-          "name": "Batshit Database",
+          "id": "db",
+          "name": "postgres",
           "type": "rds",
           "engine": "postgres",
           "engineVersion": "15",
           "instanceClass": "db.t4g.micro",
           "storage": 20,
-          "private": false,
-          "deletionProtection": true,
-          "autoMinorVersionUpgrade": true,
-          "backupRetentionPeriod": 7,
-          "multiAZ": false
+          "private": false
         }
       ]
     }
