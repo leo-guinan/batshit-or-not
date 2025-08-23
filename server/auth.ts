@@ -7,6 +7,7 @@ import { z } from "zod";
 const SALT_ROUNDS = 10;
 
 export async function register(req: Request, res: Response) {
+  console.log("Registration attempt:", { body: req.body });
   try {
     const validatedData = registerSchema.parse(req.body);
     
@@ -40,13 +41,21 @@ export async function register(req: Request, res: Response) {
     // Set up session
     (req.session as any).userId = user.id;
     
-    res.status(201).json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profileImageUrl: user.profileImageUrl,
+    // Save session explicitly
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({ message: "Failed to save session" });
+      }
+      
+      res.status(201).json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profileImageUrl: user.profileImageUrl,
+      });
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -58,6 +67,7 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
+  console.log("Login attempt:", { body: req.body });
   try {
     const validatedData = loginSchema.parse(req.body);
     
@@ -76,13 +86,21 @@ export async function login(req: Request, res: Response) {
     // Set up session
     (req.session as any).userId = user.id;
     
-    res.json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profileImageUrl: user.profileImageUrl,
+    // Save session explicitly
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({ message: "Failed to save session" });
+      }
+      
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profileImageUrl: user.profileImageUrl,
+      });
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -110,7 +128,14 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
 }
 
 export async function getCurrentUser(req: Request, res: Response) {
-  const userId = (req.session as any).userId;
+  console.log("getCurrentUser - Session:", {
+    sessionID: req.sessionID,
+    session: req.session,
+    userId: (req.session as any)?.userId,
+    cookie: req.session?.cookie,
+  });
+  
+  const userId = (req.session as any)?.userId;
   if (!userId) {
     return res.status(401).json({ message: "Not authenticated" });
   }
@@ -118,6 +143,7 @@ export async function getCurrentUser(req: Request, res: Response) {
   try {
     const user = await storage.getUser(userId);
     if (!user) {
+      console.error("User not found in storage:", userId);
       return res.status(404).json({ message: "User not found" });
     }
     

@@ -20,6 +20,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Trust proxy for production (needed for secure cookies behind load balancer)
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+  }
+
   // Session setup
   app.use(
     session({
@@ -34,7 +39,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        sameSite: 'lax',
       },
+      name: 'batshit.sid', // Custom session name
     })
   );
 
