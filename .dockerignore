@@ -1,0 +1,59 @@
+# Development files
+.git
+.gitignore
+.env
+.env.local
+.env.*.local
+*.log
+
+# Documentation
+README.md
+DEPLOYMENT.md
+*.md
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Build directories
+dist
+build
+.next
+out
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Local database
+*.sqlite
+*.sqlite3
+*.db
+
+# Temporary files
+tmp
+temp
+.cache
+
+# FlightControl specific
+.flightcontrol/*.sh
+
+# Development configs
+.eslintrc*
+.prettierrc*
+tsconfig.tsbuildinfo
+
+# Assets that will be built
+attached_assets/*.psd
+attached_assets/*.ai
+attached_assets/*.sketch

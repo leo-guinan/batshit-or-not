@@ -119,12 +119,12 @@ export default function IdeaCard({ idea, onRate, isRatingPending }: IdeaCardProp
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white font-semibold">
-                    {idea.author.firstName?.[0] || idea.author.email?.[0] || '?'}
+                    {idea.author.firstName?.[0] || idea.author.username?.[0]?.toUpperCase() || '?'}
                   </div>
                 )}
                 <div>
                   <p className="font-semibold text-foreground text-sm" data-testid="author-name">
-                    {idea.author.firstName || idea.author.email?.split('@')[0] || 'Anonymous'}
+                    {idea.author.firstName || idea.author.username || 'Anonymous'}
                   </p>
                   <p className="text-muted-foreground text-xs" data-testid="idea-time">
                     {formatTimeAgo(idea.createdAt!)}

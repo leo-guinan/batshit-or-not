@@ -1,28 +1,48 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { register, login, logout, isAuthenticated, getCurrentUser } from "./auth";
 import { insertIdeaSchema, insertRatingSchema, insertFriendshipSchema } from "@shared/schema";
 import { z } from "zod";
+import { db } from "./db";
+
+const PgSession = connectPgSimple(session);
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // Health check endpoint (before session middleware for efficiency)
+  app.get('/health', (req, res) => {
+    res.status(200).json({ 
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  });
+
+  // Session setup
+  app.use(
+    session({
+      store: new PgSession({
+        pool: (db as any).pool,
+        tableName: 'sessions',
+      }),
+      secret: process.env.SESSION_SECRET || 'batshit-secret-key-change-in-production',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      },
+    })
+  );
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  app.post('/api/auth/register', register);
+  app.post('/api/auth/login', login);
+  app.post('/api/auth/logout', logout);
+  app.get('/api/auth/user', getCurrentUser);
 
   // Ideas routes
   app.get("/api/ideas", async (req, res) => {
@@ -48,7 +68,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/ideas", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const validatedData = insertIdeaSchema.parse(req.body);
       
       const idea = await storage.createIdea({
@@ -88,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Ratings routes
   app.post("/api/ratings", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const validatedData = insertRatingSchema.parse(req.body);
       
       // Check if user already rated this idea
@@ -114,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/ratings/check/:ideaId", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const rating = await storage.getUserRatingForIdea(userId, req.params.ideaId);
       res.json({ hasRated: !!rating, rating: rating?.rating });
     } catch (error) {
@@ -139,7 +159,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/profile", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const user = await storage.getUser(userId);
       const stats = await storage.getUserStats(userId);
       
@@ -148,15 +168,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.json({
-        user,
-        stats: stats || {
-          ideasSubmitted: 0,
-          ratingsGiven: 0,
-          averageRatingReceived: 0,
-          totalRatingsReceived: 0,
-          batshitScore: 0,
-          achievements: []
-        }
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profileImageUrl: user.profileImageUrl,
+        },
+        stats,
       });
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -165,31 +185,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Friendship routes
-  app.get("/api/friends", isAuthenticated, async (req: any, res) => {
+  app.post("/api/friendships/request", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const friends = await storage.getFriends(userId);
-      res.json(friends);
-    } catch (error) {
-      console.error("Error fetching friends:", error);
-      res.status(500).json({ message: "Failed to fetch friends" });
-    }
-  });
-
-  app.get("/api/friends/requests", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const requests = await storage.getPendingFriendRequests(userId);
-      res.json(requests);
-    } catch (error) {
-      console.error("Error fetching friend requests:", error);
-      res.status(500).json({ message: "Failed to fetch friend requests" });
-    }
-  });
-
-  app.post("/api/friends/request", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const { friendId } = req.body;
       
       if (!friendId) {
@@ -202,41 +200,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const friendship = await storage.sendFriendRequest(userId, friendId);
       res.status(201).json(friendship);
-    } catch (error) {
-      if (error instanceof Error && error.message === "Friendship already exists or pending") {
-        return res.status(409).json({ message: error.message });
+    } catch (error: any) {
+      if (error.message?.includes("already exists")) {
+        return res.status(409).json({ message: "Friend request already exists or pending" });
       }
       console.error("Error sending friend request:", error);
       res.status(500).json({ message: "Failed to send friend request" });
     }
   });
 
-  app.put("/api/friends/requests/:friendshipId", isAuthenticated, async (req: any, res) => {
+  app.post("/api/friendships/:id/respond", isAuthenticated, async (req: any, res) => {
     try {
-      const { friendshipId } = req.params;
       const { status } = req.body;
       
       if (!['accepted', 'rejected'].includes(status)) {
-        return res.status(400).json({ message: "Status must be 'accepted' or 'rejected'" });
+        return res.status(400).json({ message: "Invalid status. Must be 'accepted' or 'rejected'" });
       }
       
-      const friendship = await storage.respondToFriendRequest(friendshipId, status);
+      const friendship = await storage.respondToFriendRequest(req.params.id, status);
       res.json(friendship);
-    } catch (error) {
-      if (error instanceof Error && error.message === "Friendship not found") {
-        return res.status(404).json({ message: error.message });
+    } catch (error: any) {
+      if (error.message?.includes("not found")) {
+        return res.status(404).json({ message: "Friend request not found" });
       }
       console.error("Error responding to friend request:", error);
       res.status(500).json({ message: "Failed to respond to friend request" });
     }
   });
 
-  app.delete("/api/friends/:friendId", isAuthenticated, async (req: any, res) => {
+  app.get("/api/friendships", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const { friendId } = req.params;
+      const userId = req.session.userId;
+      const friends = await storage.getFriends(userId);
       
-      await storage.removeFriend(userId, friendId);
+      // Remove password hash from response
+      const sanitizedFriends = friends.map(({ passwordHash, ...friend }) => friend);
+      
+      res.json(sanitizedFriends);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+      res.status(500).json({ message: "Failed to fetch friends" });
+    }
+  });
+
+  app.get("/api/friendships/pending", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.session.userId;
+      const pendingRequests = await storage.getPendingFriendRequests(userId);
+      
+      // Remove password hash from response
+      const sanitizedRequests = pendingRequests.map(({ passwordHash, ...request }) => request);
+      
+      res.json(sanitizedRequests);
+    } catch (error) {
+      console.error("Error fetching pending friend requests:", error);
+      res.status(500).json({ message: "Failed to fetch pending friend requests" });
+    }
+  });
+
+  app.delete("/api/friendships/:friendId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.session.userId;
+      await storage.removeFriend(userId, req.params.friendId);
       res.status(204).send();
     } catch (error) {
       console.error("Error removing friend:", error);
@@ -246,15 +271,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/users/search", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const query = req.query.q as string;
       
       if (!query || query.length < 2) {
-        return res.status(400).json({ message: "Search query must be at least 2 characters" });
+        return res.json([]);
       }
       
       const users = await storage.searchUsers(query, userId);
-      res.json(users);
+      
+      // Remove password hash from response
+      const sanitizedUsers = users.map(({ passwordHash, ...user }) => user);
+      
+      res.json(sanitizedUsers);
     } catch (error) {
       console.error("Error searching users:", error);
       res.status(500).json({ message: "Failed to search users" });
@@ -263,15 +292,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/ratings/comparison", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const comparisonData = await storage.getRatingComparison(userId);
-      res.json(comparisonData);
+      const userId = req.session.userId;
+      const comparison = await storage.getRatingComparison(userId);
+      res.json(comparison);
     } catch (error) {
       console.error("Error fetching rating comparison:", error);
       res.status(500).json({ message: "Failed to fetch rating comparison" });
     }
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
+  const server = createServer(app);
+  return server;
 }

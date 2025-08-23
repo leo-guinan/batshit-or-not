@@ -24,10 +24,12 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table (mandatory for Replit Auth)
+// User storage table
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique(),
+  username: varchar("username").unique().notNull(),
+  email: varchar("email").unique().notNull(),
+  passwordHash: varchar("password_hash").notNull(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
@@ -157,3 +159,20 @@ export type Rating = typeof ratings.$inferSelect;
 export type UserStats = typeof userStats.$inferSelect;
 export type InsertFriendship = z.infer<typeof insertFriendshipSchema>;
 export type Friendship = typeof friendships.$inferSelect;
+
+// Auth schemas
+export const registerSchema = z.object({
+  username: z.string().min(3).max(20).regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
+  email: z.string().email(),
+  password: z.string().min(6).max(100),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+});
+
+export const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;

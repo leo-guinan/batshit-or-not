@@ -24,25 +24,10 @@ interface FriendWithFriendship extends User {
 }
 
 export default function Profile() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, logout } = useAuth();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("stats");
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !user) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [user, isLoading, toast]);
 
   const { data: profileData, isLoading: profileLoading, error } = useQuery<ProfileData>({
     queryKey: ['/api/profile'],
@@ -169,7 +154,7 @@ export default function Profile() {
     if (userData.firstName) {
       return userData.firstName;
     }
-    return userData.email?.split('@')[0] || 'User';
+    return userData.username || userData.email?.split('@')[0] || 'User';
   };
 
   const getRatingLabel = (rating: number) => {
@@ -200,7 +185,10 @@ export default function Profile() {
             </div>
             <button
               className="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-xl transition-all hover:scale-105"
-              onClick={() => window.location.href = "/api/logout"}
+              onClick={() => {
+                logout();
+                window.location.href = "/";
+              }}
               data-testid="button-logout"
             >
               Logout
@@ -229,6 +217,9 @@ export default function Profile() {
             <h2 className="text-xl font-bold text-foreground mb-2" data-testid="profile-name">
               {getDisplayName()}
             </h2>
+            <p className="text-muted-foreground text-sm" data-testid="profile-username">
+              @{userData.username}
+            </p>
             <p className="text-muted-foreground text-sm mb-4" data-testid="profile-email">
               {userData.email}
             </p>

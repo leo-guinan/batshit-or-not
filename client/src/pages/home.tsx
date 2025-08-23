@@ -20,21 +20,6 @@ export default function Home() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !user) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [user, isLoading, toast]);
-
   const { data: ideas, isLoading: ideasLoading, error: ideasError } = useQuery<(Idea & { author: User | null })[]>({
     queryKey: ['/api/ideas', currentFeed],
     queryFn: async ({ queryKey }) => {
@@ -67,17 +52,6 @@ export default function Home() {
       });
     },
     onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
       toast({
         title: "Error",
         description: error.message.includes('already rated') ? "You've already rated this idea!" : "Failed to submit rating",
@@ -132,7 +106,7 @@ export default function Home() {
                 />
               ) : (
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white text-sm font-bold hover:scale-110 transition-transform">
-                  {user?.firstName?.[0] || user?.email?.[0] || '?'}
+                  {user?.firstName?.[0] || user?.username?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
             </div>

@@ -18,8 +18,11 @@ import { db } from "./db";
 import { eq, desc, sql, and, isNull, or } from "drizzle-orm";
 
 export interface IStorage {
-  // User operations (mandatory for Replit Auth)
+  // User operations
   getUser(id: string): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Idea operations
@@ -62,6 +65,21 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    const [user] = await db.insert(users).values(userData).returning();
     return user;
   }
 
@@ -274,7 +292,9 @@ export class DatabaseStorage implements IStorage {
     const results = await db
       .select({
         id: users.id,
+        username: users.username,
         email: users.email,
+        passwordHash: users.passwordHash,
         firstName: users.firstName,
         lastName: users.lastName,
         profileImageUrl: users.profileImageUrl,
@@ -303,7 +323,9 @@ export class DatabaseStorage implements IStorage {
     const results = await db
       .select({
         id: users.id,
+        username: users.username,
         email: users.email,
+        passwordHash: users.passwordHash,
         firstName: users.firstName,
         lastName: users.lastName,
         profileImageUrl: users.profileImageUrl,
@@ -342,6 +364,7 @@ export class DatabaseStorage implements IStorage {
         and(
           sql`${users.id} != ${currentUserId}`,
           or(
+            sql`${users.username} ILIKE ${`%${query}%`}`,
             sql`${users.firstName} ILIKE ${`%${query}%`}`,
             sql`${users.lastName} ILIKE ${`%${query}%`}`,
             sql`${users.email} ILIKE ${`%${query}%`}`
@@ -468,4 +491,18 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// Use mock storage when DATABASE_URL is not set
+let storage: IStorage;
+
+if (!process.env.DATABASE_URL) {
+  import('./storage.mock.js').then(module => {
+    storage = new module.MockStorage();
+  });
+  // Temporary sync initialization for immediate use
+  const { MockStorage } = await import('./storage.mock.js');
+  storage = new MockStorage();
+} else {
+  storage = new DatabaseStorage();
+}
+
+export { storage };
