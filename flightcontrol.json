@@ -33,26 +33,27 @@
           "envVariables": {
             "NODE_ENV": "production",
             "PORT": "5000",
-           "DATABASE_URL": {
-              "fromService": {
-                "id": "db",
-                "value": "dbConnectionString"
-              }
+            "SESSION_SECRET": {
+              "fromParameterStore": "batshit-session-secret"
+            },
+            "DATABASE_URL": {
+              "fromDatabase": "db"
             }
           }
-        },
+        }
+      ],
+      "databases": [
         {
           "id": "db",
           "name": "Database",
           "type": "rds",
           "engine": "postgres",
-          "engineVersion": "12",
-          "instanceSize": "db.t4g.micro",
+          "engineVersion": "15",
+          "instanceClass": "db.t4g.micro",
           "storage": 20,
           "private": false
         }
       ]
-    
     }
   ]
 }

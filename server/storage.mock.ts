@@ -1,6 +1,6 @@
 import type { IStorage } from "./storage";
 import type { User, Idea, InsertIdea, InsertRating, Rating, UserStats, Friendship } from "@shared/schema";
-import { v4 as uuidv4 } from "crypto";
+import { randomUUID as uuidv4 } from "crypto";
 
 // In-memory storage
 const users = new Map<string, User>();
