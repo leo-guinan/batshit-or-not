@@ -10,22 +10,29 @@ export async function register(req: Request, res: Response) {
   console.log("Registration attempt:", { body: req.body });
   try {
     const validatedData = registerSchema.parse(req.body);
+    console.log("Validation passed");
     
     // Check if username or email already exists
+    console.log("Checking for existing username:", validatedData.username);
     const existingUser = await storage.getUserByUsername(validatedData.username);
     if (existingUser) {
+      console.log("Username already exists");
       return res.status(409).json({ message: "Username already taken" });
     }
     
+    console.log("Checking for existing email:", validatedData.email);
     const existingEmail = await storage.getUserByEmail(validatedData.email);
     if (existingEmail) {
+      console.log("Email already exists");
       return res.status(409).json({ message: "Email already registered" });
     }
     
     // Hash password
+    console.log("Hashing password");
     const passwordHash = await bcrypt.hash(validatedData.password, SALT_ROUNDS);
     
     // Create user
+    console.log("Creating user");
     const user = await storage.createUser({
       username: validatedData.username,
       email: validatedData.email,
@@ -34,20 +41,25 @@ export async function register(req: Request, res: Response) {
       lastName: validatedData.lastName || null,
       profileImageUrl: null,
     });
+    console.log("User created:", { id: user.id, username: user.username });
     
     // Initialize user stats
+    console.log("Initializing user stats");
     await storage.initializeUserStats(user.id);
     
     // Set up session
-    (req.session as any).userId = user.id;
+    console.log("Setting up session for user:", user.id);
+    req.session.userId = user.id;
     
     // Save session explicitly
+    console.log("Saving session");
     req.session.save((err) => {
       if (err) {
         console.error("Session save error:", err);
         return res.status(500).json({ message: "Failed to save session" });
       }
       
+      console.log("Session saved successfully, sending response");
       res.status(201).json({
         id: user.id,
         username: user.username,
@@ -59,6 +71,7 @@ export async function register(req: Request, res: Response) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.error("Validation error:", error.errors);
       return res.status(400).json({ message: "Invalid input", errors: error.errors });
     }
     console.error("Registration error:", error);
@@ -84,7 +97,7 @@ export async function login(req: Request, res: Response) {
     }
     
     // Set up session
-    (req.session as any).userId = user.id;
+    req.session.userId = user.id;
     
     // Save session explicitly
     req.session.save((err) => {
@@ -121,7 +134,7 @@ export async function logout(req: Request, res: Response) {
 }
 
 export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
-  if (!(req.session as any).userId) {
+  if (!req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
   next();
@@ -131,11 +144,11 @@ export async function getCurrentUser(req: Request, res: Response) {
   console.log("getCurrentUser - Session:", {
     sessionID: req.sessionID,
     session: req.session,
-    userId: (req.session as any)?.userId,
-    cookie: req.session?.cookie,
+    userId: req.session.userId,
+    cookie: req.session.cookie,
   });
   
-  const userId = (req.session as any)?.userId;
+  const userId = req.session.userId;
   if (!userId) {
     return res.status(401).json({ message: "Not authenticated" });
   }

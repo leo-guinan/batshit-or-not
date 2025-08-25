@@ -26,24 +26,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   // Session setup
-  app.use(
-    session({
-      store: new PgSession({
-        pool: (db as any).pool,
-        tableName: 'sessions',
-      }),
-      secret: process.env.SESSION_SECRET || 'batshit-secret-key-change-in-production',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: 'lax',
-      },
-      name: 'batshit.sid', // Custom session name
-    })
-  );
+  const sessionConfig: session.SessionOptions = {
+    secret: process.env.SESSION_SECRET || 'batshit-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: 'lax',
+    },
+    name: 'batshit.sid', // Custom session name
+  };
+
+  // Only use PostgreSQL session store if DATABASE_URL is set
+  if (process.env.DATABASE_URL) {
+    sessionConfig.store = new PgSession({
+      pool: (db as any).pool,
+      tableName: 'sessions',
+    });
+    console.log('Using PostgreSQL session store');
+  } else {
+    console.log('Using memory session store (no DATABASE_URL)');
+  }
+
+  app.use(session(sessionConfig));
 
   // Auth routes
   app.post('/api/auth/register', register);
@@ -73,7 +80,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/ideas", isAuthenticated, async (req: any, res) => {
+  app.post("/api/ideas", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const validatedData = insertIdeaSchema.parse(req.body);
@@ -113,7 +120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Ratings routes
-  app.post("/api/ratings", isAuthenticated, async (req: any, res) => {
+  app.post("/api/ratings", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const validatedData = insertRatingSchema.parse(req.body);
@@ -139,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/ratings/check/:ideaId", isAuthenticated, async (req: any, res) => {
+  app.get("/api/ratings/check/:ideaId", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const rating = await storage.getUserRatingForIdea(userId, req.params.ideaId);
@@ -164,7 +171,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/profile", isAuthenticated, async (req: any, res) => {
+  app.get("/api/profile", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const user = await storage.getUser(userId);
@@ -192,7 +199,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Friendship routes
-  app.post("/api/friendships/request", isAuthenticated, async (req: any, res) => {
+  app.post("/api/friendships/request", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const { friendId } = req.body;
@@ -216,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/friendships/:id/respond", isAuthenticated, async (req: any, res) => {
+  app.post("/api/friendships/:id/respond", isAuthenticated, async (req, res) => {
     try {
       const { status } = req.body;
       
@@ -235,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/friendships", isAuthenticated, async (req: any, res) => {
+  app.get("/api/friendships", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const friends = await storage.getFriends(userId);
@@ -250,7 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/friendships/pending", isAuthenticated, async (req: any, res) => {
+  app.get("/api/friendships/pending", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const pendingRequests = await storage.getPendingFriendRequests(userId);
@@ -265,7 +272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/friendships/:friendId", isAuthenticated, async (req: any, res) => {
+  app.delete("/api/friendships/:friendId", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       await storage.removeFriend(userId, req.params.friendId);
@@ -276,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/users/search", isAuthenticated, async (req: any, res) => {
+  app.get("/api/users/search", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const query = req.query.q as string;
@@ -297,7 +304,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/ratings/comparison", isAuthenticated, async (req: any, res) => {
+  app.get("/api/ratings/comparison", isAuthenticated, async (req, res) => {
     try {
       const userId = req.session.userId;
       const comparison = await storage.getRatingComparison(userId);

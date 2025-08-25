@@ -495,14 +495,19 @@ export class DatabaseStorage implements IStorage {
 let storage: IStorage;
 
 if (!process.env.DATABASE_URL) {
-  import('./storage.mock.js').then(module => {
-    storage = new module.MockStorage();
-  });
-  // Temporary sync initialization for immediate use
+  console.log("Using MockStorage for production (no DATABASE_URL)");
   const { MockStorage } = await import('./storage.mock.js');
   storage = new MockStorage();
+  console.log("MockStorage initialized");
 } else {
+  console.log("Using DatabaseStorage with DATABASE_URL");
   storage = new DatabaseStorage();
+  console.log("DatabaseStorage initialized");
+}
+
+// Ensure storage is initialized
+if (!storage) {
+  throw new Error("Storage initialization failed");
 }
 
 export { storage };
